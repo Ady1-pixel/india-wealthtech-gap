@@ -44,7 +44,14 @@ a{color:inherit}
 #topbar nav a:hover{color:var(--ink)}
 
 /* ---------- hero ---------- */
-.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:space-between;position:relative}
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+#ambient{position:absolute;inset:0;pointer-events:none;z-index:-1}
+#ambient .glow{position:absolute;border-radius:50%;filter:blur(90px);opacity:.16}
+#ambient .g1{width:520px;height:520px;background:var(--gold);top:-160px;right:-120px;animation:drift 16s ease-in-out infinite alternate}
+#ambient .g2{width:420px;height:420px;background:var(--fintech);bottom:-140px;left:-120px;animation:drift 20s ease-in-out infinite alternate-reverse}
+@keyframes drift{to{transform:translate(40px,30px) scale(1.08)}}
+#contours{position:absolute;inset:0;width:100%;height:100%;opacity:.5}
+.hero-mid{will-change:transform,opacity}
 .hero-head{display:flex;justify-content:space-between;padding:1.3rem 1.6rem;font-family:var(--mono);
   font-size:.7rem;letter-spacing:.2em;text-transform:uppercase}
 .hero-head .l{color:var(--gold)} .hero-head .r{color:var(--ink2)}
@@ -165,6 +172,23 @@ input[type=range]{width:100%;accent-color:var(--gold);height:22px}
 .result .big span{color:var(--gold)}
 .result .trail{font-family:var(--mono);font-size:.72rem;color:var(--ink2);margin-top:1rem;line-height:1.9}
 
+/* marquee band */
+.band{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  background:var(--surface);margin-top:6rem;padding:1.6rem 0}
+.band-track{display:inline-flex;white-space:nowrap;animation:tick 38s linear infinite}
+.band:hover .band-track{animation-play-state:paused}
+.band .b{font-family:var(--serif);font-style:italic;font-weight:600;
+  font-size:clamp(1.6rem,3.4vw,2.8rem);color:var(--ink);padding-right:1.2rem}
+.band .b em{color:var(--gold);font-style:italic}
+.band .sep{color:var(--gold);padding-right:1.2rem}
+
+/* scatter entrance */
+#scatter .pt{transform-origin:center;transform-box:fill-box;transform:scale(0);
+  transition:transform .5s cubic-bezier(.22,1,.36,1)}
+#scatter.in .pt{transform:scale(1)}
+#scatter text{opacity:0;transition:opacity .5s ease-out .5s}
+#scatter.in text{opacity:1}
+
 /* footer */
 footer{border-top:1px solid var(--line);margin-top:6rem}
 .foot-in{max-width:1150px;margin:0 auto;padding:2rem 1.6rem;display:flex;justify-content:space-between;gap:2rem;flex-wrap:wrap}
@@ -204,6 +228,16 @@ footer{border-top:1px solid var(--line);margin-top:6rem}
 </header>
 
 <div class="hero">
+  <div id="ambient" aria-hidden="true">
+    <div class="glow g1"></div><div class="glow g2"></div>
+    <svg id="contours" preserveAspectRatio="none" viewBox="0 0 1200 800">
+      <path d="M-40,620 C220,540 380,700 640,610 S1050,530 1260,600" fill="none" stroke="#2a3040" stroke-width="1"/>
+      <path d="M-40,660 C240,580 400,740 660,650 S1070,570 1260,640" fill="none" stroke="#2a3040" stroke-width="1" opacity=".7"/>
+      <path d="M-40,700 C260,620 420,780 680,690 S1090,610 1260,680" fill="none" stroke="#2a3040" stroke-width="1" opacity=".45"/>
+      <path d="M-40,180 C200,240 420,120 700,190 S1080,250 1260,180" fill="none" stroke="#2a3040" stroke-width="1" opacity=".6"/>
+      <path d="M-40,140 C220,200 440,80 720,150 S1090,210 1260,140" fill="none" stroke="#2a3040" stroke-width="1" opacity=".35"/>
+    </svg>
+  </div>
   <div class="hero-head"><span class="l">India WealthTech · Sector Note</span><span class="r">July 2026</span></div>
   <div class="hero-mid">
     <h1>The <em>experience gap</em><br>in Indian investing</h1>
@@ -257,6 +291,8 @@ footer{border-top:1px solid var(--line);margin-top:6rem}
   <p class="modelnote reveal" id="modelnote"></p>
 </section>
 
+<div class="band" aria-hidden="true"><div class="band-track" id="band"></div></div>
+
 <section id="desk">
   <div class="sec-label reveal">04 · Scenario desk</div>
   <h2 class="reveal">Pick a broker. Close its gap. <em>Read off what the upgrade is worth.</em></h2>
@@ -301,12 +337,22 @@ const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 /* loader */
 addEventListener('load',()=>setTimeout(()=>$('#loader').classList.add('gone'),reduced?0:950));
 
-/* progress + topbar */
+/* progress + topbar + hero parallax */
+const heroMid=$('.hero-mid'),ambient=$('#ambient');
 addEventListener('scroll',()=>{
-  const h=document.documentElement, p=h.scrollTop/(h.scrollHeight-h.clientHeight);
+  const h=document.documentElement, y=h.scrollTop, p=y/(h.scrollHeight-h.clientHeight);
   $('#progress').style.width=(p*100)+'%';
-  $('#topbar').classList.toggle('show',h.scrollTop>innerHeight*.85);
+  $('#topbar').classList.toggle('show',y>innerHeight*.85);
+  if(!reduced&&y<innerHeight){
+    heroMid.style.transform=`translateY(${y*.22}px)`;
+    heroMid.style.opacity=Math.max(0,1-y/(innerHeight*.7));
+    ambient.style.transform=`translateY(${y*.12}px)`;
+  }
 },{passive:true});
+
+/* marquee band */
+{const seg=`<span class="b">Only <em>0.6%</em> of 44,200 reviews mention AI.</span><span class="b sep">·</span><span class="b">The whitespace is <em>open</em>.</span><span class="b sep">·</span>`;
+ $('#band').innerHTML=seg.repeat(4);}
 
 /* reveal on scroll */
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.18});
@@ -382,8 +428,9 @@ document.querySelectorAll('[data-count]').forEach(el=>cio.observe(el));
  const m=DATA.model;
  s+=`<line x1="${X(xs[0]+.5)}" y1="${Y(m.intercept+m.slope*(xs[0]+.5))}" x2="${X(xs[1]-.5)}" y2="${Y(m.intercept+m.slope*(xs[1]-.5))}" stroke="#a8adba" stroke-dasharray="6 5" stroke-width="1.5"/>`;
  const labeled=['Dhan','Groww','ICICIdirect','Motilal Oswal','Upstox','Zerodha'];
- pts.forEach(f=>{const c=f.category==='fintech'?'#3987e5':'#d95926';
+ pts.forEach((f,i)=>{const c=f.category==='fintech'?'#3987e5':'#d95926';
   s+=`<circle class="pt" cx="${X(f.score)}" cy="${Y(f.growthPct)}" r="7" fill="${c}"
+    style="transition-delay:${(i*.05).toFixed(2)}s"
     data-firm="${f.firm}" data-v="${f.score} · ${f.growthPct>0?'+':''}${f.growthPct}%"/>`;
   if(labeled.includes(f.firm))s+=`<text x="${X(f.score)}" y="${Y(f.growthPct)-13}" fill="#a8adba" font-size="11" text-anchor="middle">${f.firm}</text>`});
  svg.innerHTML=s;
