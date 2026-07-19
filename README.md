@@ -73,4 +73,4 @@ Raw review text is not redistributed in this repo (it is user-generated content 
 
 ## Author
 
-Aditya Dalal, University of Massachusetts Amherst (Managerial Economics & Informatics). CFA Level 1 candidate. Interested in asset management, housing finance, and the economics of digital distribution in Indian financial services.
+Aditya Dalal, University of Massachusetts Amherst (Managerial Economics & Informatics). 
