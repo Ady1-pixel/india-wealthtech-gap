@@ -2,7 +2,9 @@
 
 **What would happen if India's investment firms actually fixed their apps?** This project quantifies the digital experience gap across 17 Indian investing platforms from 44,200 real Google Play reviews, links experience quality to NSE active-client growth, and simulates the client and revenue payoff of closing the gap.
 
-Built with Python end to end: scraping, NLP, statistical modeling, and an interactive Streamlit dashboard.
+Built with Python end to end: scraping, NLP, statistical modeling, and an interactive site.
+
+**Live site: [ady1-pixel.github.io/india-wealthtech-gap](https://ady1-pixel.github.io/india-wealthtech-gap/)** — scroll-driven sector note with the coverage ladder, complaint matrix, growth scatter, and a what-if simulator. (A Streamlit version also ships in `app/`.)
 
 ## Headline findings
 

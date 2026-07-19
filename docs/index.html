@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Experience Gap in Indian Investing — India WealthTech Sector Note</title>
+<meta name="description" content="44,200 Play Store reviews across 17 Indian investing apps, scored and tied to NSE client growth. What would better AI and UX be worth?">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,600&family=Archivo:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#12151c; --surface:#1a1e27; --raise:#1e232e; --line:#2a3040;
+  --ink:#f4f2ec; --ink2:#a8adba;
+  --fintech:#3987e5; --incumbent:#d95926; --gold:#eda100;
+  --serif:'Fraunces',Georgia,serif; --sans:'Archivo',sans-serif; --mono:'IBM Plex Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;overflow-x:hidden}
+::selection{background:var(--gold);color:var(--bg)}
+a{color:inherit}
+
+/* ---------- loader ---------- */
+#loader{position:fixed;inset:0;background:var(--bg);z-index:50;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:14px;transition:opacity .5s ease-out,visibility .5s}
+#loader.gone{opacity:0;visibility:hidden}
+#loader .word{font-family:var(--mono);font-size:.72rem;letter-spacing:.35em;color:var(--gold);text-transform:uppercase}
+#loader .bar{width:150px;height:1px;background:var(--line);overflow:hidden}
+#loader .bar i{display:block;height:100%;width:100%;background:var(--gold);transform:scaleX(0);
+  transform-origin:left;animation:load .9s ease-out forwards}
+@keyframes load{to{transform:scaleX(1)}}
+
+/* ---------- progress + nav ---------- */
+#progress{position:fixed;top:0;left:0;height:2px;background:var(--gold);width:0;z-index:40}
+#topbar{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;justify-content:space-between;align-items:center;
+  padding:.7rem 1.4rem;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);transform:translateY(-100%);transition:transform .3s ease-out}
+#topbar.show{transform:none}
+#topbar .wm{font-family:var(--mono);font-size:.66rem;letter-spacing:.22em;color:var(--gold);text-transform:uppercase}
+#topbar nav{display:flex;gap:1.3rem}
+#topbar nav a{font-family:var(--mono);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink2);text-decoration:none;transition:color .18s}
+#topbar nav a:hover{color:var(--ink)}
+
+/* ---------- hero ---------- */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:space-between;position:relative}
+.hero-head{display:flex;justify-content:space-between;padding:1.3rem 1.6rem;font-family:var(--mono);
+  font-size:.7rem;letter-spacing:.2em;text-transform:uppercase}
+.hero-head .l{color:var(--gold)} .hero-head .r{color:var(--ink2)}
+.hero-mid{max-width:1150px;margin:0 auto;padding:0 1.6rem;width:100%}
+h1{font-family:var(--serif);font-weight:600;font-size:clamp(2.6rem,7.2vw,6.2rem);line-height:1.02;letter-spacing:-.015em}
+h1 em{font-style:italic;color:var(--gold)}
+.hero-sub{color:var(--ink2);font-size:clamp(1rem,1.6vw,1.25rem);max-width:44rem;margin-top:1.4rem}
+.dateline{display:flex;gap:1.8rem;flex-wrap:wrap;font-family:var(--mono);font-size:.72rem;color:var(--ink2);
+  border-top:1px solid var(--line);padding-top:.8rem;margin-top:2.2rem}
+.dateline b{color:var(--ink);font-weight:500}
+.hero-foot{border-top:1px solid var(--line)}
+.scrollcue{display:flex;justify-content:center;padding:.8rem;font-family:var(--mono);font-size:.62rem;
+  letter-spacing:.3em;color:var(--ink2);text-transform:uppercase;animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.45}50%{opacity:1}}
+
+/* ticker */
+.ticker{overflow:hidden;border-top:1px solid var(--line);background:var(--surface);white-space:nowrap}
+.ticker-track{display:inline-flex;animation:tick 46s linear infinite}
+.ticker:hover .ticker-track{animation-play-state:paused}
+.tk{display:inline-flex;align-items:center;gap:.55rem;padding:.62rem 1.5rem;font-family:var(--mono);font-size:.72rem}
+.tk .dot{width:8px;height:8px;border-radius:2px;flex:none}
+.tk .n{color:var(--ink2)} .tk .s{color:var(--ink);font-weight:600}
+.tk .r{color:var(--gold);letter-spacing:.1em;font-size:.6rem}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* ---------- sections ---------- */
+section{max-width:1150px;margin:0 auto;padding:6.5rem 1.6rem 2rem}
+.sec-label{font-family:var(--mono);font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);
+  display:flex;align-items:center;gap:.9rem;margin-bottom:1.1rem}
+.sec-label::after{content:"";height:1px;flex:1;background:var(--line)}
+h2{font-family:var(--serif);font-weight:600;font-size:clamp(1.7rem,3.4vw,2.7rem);line-height:1.12;max-width:46rem}
+h2 em{font-style:italic;color:var(--gold)}
+.lede{color:var(--ink2);max-width:44rem;margin-top:.9rem}
+
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1)}
+.reveal.in{opacity:1;transform:none}
+
+/* stat band */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:2.4rem}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:1.5rem 1.6rem;transition:border-color .18s}
+.stat:hover{border-color:#3a4155}
+.stat .k{font-family:var(--mono);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink2)}
+.stat .v{font-family:var(--serif);font-weight:600;font-size:clamp(2.4rem,4.6vw,3.6rem);line-height:1.1;margin-top:.4rem}
+.stat.gold{border-color:var(--gold)} .stat.gold .v{color:var(--gold)}
+.stat .d{font-family:var(--mono);font-size:.7rem;color:var(--ink2);margin-top:.3rem}
+
+/* ladder */
+.legend{display:flex;gap:1.6rem;font-family:var(--mono);font-size:.7rem;color:var(--ink2);margin:1.8rem 0 .8rem}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:.45rem}
+.ladder{border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.lhead,.lrow{display:grid;grid-template-columns:2.5rem 14.5rem 3.4rem 1fr 7.4rem 6.6rem;gap:1rem;align-items:center;padding:.5rem 1rem}
+.lhead{font-family:var(--mono);font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink2);
+  background:var(--surface);border-bottom:1px solid var(--line)}
+.lrow{border-bottom:1px solid var(--raise);transition:background .18s}
+.lrow:last-child{border-bottom:none}
+.lrow:hover{background:var(--raise)}
+.lrow .rk{font-family:var(--mono);font-size:.74rem;color:var(--ink2)}
+.lrow .fm{font-weight:500;font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lrow .fm small{display:block;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2)}
+.lrow .sc{font-family:var(--mono);font-size:1.05rem;font-weight:600;text-align:right}
+.track{background:var(--raise);border-radius:3px;height:10px}
+.fill{height:100%;border-radius:3px;transform:scaleX(0);transform-origin:left;
+  transition:transform .7s cubic-bezier(.22,1,.36,1)}
+.in .fill{transform:scaleX(1)}
+.lrow .cl{font-family:var(--mono);font-size:.74rem;color:var(--ink2);text-align:right}
+.chip{font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;text-align:center;
+  padding:.22rem .5rem;border-radius:4px;border:1px solid var(--line);color:var(--ink2)}
+.chip.leader{border-color:var(--gold);color:var(--gold)}
+.chip.laggard{border-color:var(--incumbent);color:var(--incumbent)}
+
+/* matrix */
+.matrix-wrap{margin-top:2rem;overflow-x:auto}
+.matrix{display:grid;gap:4px;min-width:760px}
+.mx-corner{}
+.mx-col{font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);
+  align-self:end;padding-bottom:.4rem;line-height:1.35}
+.mx-firm{font-family:var(--mono);font-size:.72rem;color:var(--ink2);display:flex;align-items:center;justify-content:flex-end;
+  padding-right:.7rem;white-space:nowrap}
+.cell{position:relative;aspect-ratio:2.6/1;border-radius:4px;background:var(--surface);cursor:default;
+  transition:outline-color .15s, transform .15s}
+.cell i{position:absolute;inset:0;border-radius:4px;background:var(--fintech);opacity:0}
+.cell span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:.66rem;color:var(--ink);opacity:0;transition:opacity .15s}
+.cell:hover{transform:scale(1.06);z-index:2}
+.cell:hover span{opacity:1}
+.cell.worst{outline:1.5px solid var(--gold);outline-offset:1px}
+.mx-note{font-family:var(--mono);font-size:.7rem;color:var(--ink2);margin-top:1rem}
+.mx-note b{color:var(--gold);font-weight:500}
+
+/* scatter */
+.thesis{border-left:2px solid var(--gold);padding-left:1.1rem;margin:1.8rem 0;
+  font-family:var(--serif);font-size:clamp(1.15rem,2vw,1.5rem);max-width:46rem}
+#scatter{width:100%;height:auto;display:block;margin-top:1rem}
+#scatter text{font-family:var(--mono)}
+.pt{transition:r .15s}
+.modelnote{font-family:var(--mono);font-size:.72rem;color:var(--ink2);margin-top:.8rem;max-width:46rem;line-height:1.8}
+
+/* tooltip */
+#tip{position:fixed;pointer-events:none;background:var(--raise);border:1px solid var(--line);border-radius:6px;
+  padding:.55rem .8rem;font-family:var(--mono);font-size:.7rem;color:var(--ink);z-index:45;opacity:0;
+  transition:opacity .12s;max-width:240px;line-height:1.7}
+#tip b{color:var(--gold);font-weight:500}
+
+/* scenario desk */
+.desk{display:grid;grid-template-columns:5fr 7fr;gap:2.2rem;margin-top:2.2rem;align-items:start}
+.controls label{display:block;font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink2);margin:1.4rem 0 .5rem}
+.controls label:first-child{margin-top:0}
+.controls output{color:var(--gold);margin-left:.6rem;letter-spacing:0}
+select{width:100%;background:var(--surface);border:1px solid var(--line);color:var(--ink);border-radius:6px;
+  padding:.65rem .8rem;font-family:var(--sans);font-size:.95rem;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23a8adba'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right .8rem center}
+select:focus,input:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+input[type=range]{width:100%;accent-color:var(--gold);height:22px}
+.result{background:var(--surface);border:1px solid var(--gold);border-radius:8px;padding:1.8rem 2rem;position:sticky;top:70px}
+.result .big{font-family:var(--serif);font-weight:600;font-size:clamp(2rem,4vw,3.1rem);line-height:1.12}
+.result .big span{color:var(--gold)}
+.result .trail{font-family:var(--mono);font-size:.72rem;color:var(--ink2);margin-top:1rem;line-height:1.9}
+
+/* footer */
+footer{border-top:1px solid var(--line);margin-top:6rem}
+.foot-in{max-width:1150px;margin:0 auto;padding:2rem 1.6rem;display:flex;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+.foot-in .col{font-family:var(--mono);font-size:.68rem;color:var(--ink2);line-height:2;max-width:34rem}
+.foot-in a{color:var(--gold);text-decoration:none}
+.foot-in a:hover{text-decoration:underline}
+
+@media(max-width:900px){
+  .stats{grid-template-columns:1fr}
+  .lhead,.lrow{grid-template-columns:2rem 1fr 2.8rem 5rem}
+  .lhead div:nth-child(4),.lhead div:nth-child(5),.lrow .track,.lrow .cl{display:none}
+  .desk{grid-template-columns:1fr}
+  .result{position:static}
+  #topbar nav{display:none}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .reveal{opacity:1;transform:none}
+  .fill{transform:scaleX(1)}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<div id="loader" aria-hidden="true">
+  <div class="word">India WealthTech · Sector Note</div>
+  <div class="bar"><i></i></div>
+</div>
+<div id="progress"></div>
+<header id="topbar">
+  <span class="wm">India WealthTech · Sector Note</span>
+  <nav>
+    <a href="#coverage">Coverage</a><a href="#anatomy">Complaints</a>
+    <a href="#growth">Growth link</a><a href="#desk">Scenario desk</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <div class="hero-head"><span class="l">India WealthTech · Sector Note</span><span class="r">July 2026</span></div>
+  <div class="hero-mid">
+    <h1>The <em>experience gap</em><br>in Indian investing</h1>
+    <p class="hero-sub">What would happen if India's investment firms fixed their apps?
+      44,200 Play Store reviews, scored and tied to NSE client growth, put a number on it.</p>
+    <div class="dateline">
+      <span>REVIEWS <b id="d-reviews">44,200</b></span><span>APPS <b>17</b></span>
+      <span>BROKERS IN GROWTH MODEL <b>13</b></span><span>DATA <b>Google Play · NSE</b></span>
+    </div>
+  </div>
+  <div class="hero-foot">
+    <div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
+    <div class="scrollcue">Scroll</div>
+  </div>
+</div>
+
+<section id="headline">
+  <div class="sec-label reveal">The read in three numbers</div>
+  <div class="stats">
+    <div class="stat reveal"><div class="k">Reviews analyzed</div><div class="v" data-count="44200">0</div><div class="d">17 apps · IN storefront · newest first</div></div>
+    <div class="stat reveal"><div class="k">Best vs weakest experience</div><div class="v"><span data-count="88">0</span> · <span data-count="68">0</span></div><div class="d">Groww leads · Motilal Oswal trails</div></div>
+    <div class="stat gold reveal"><div class="k">Reviews mentioning AI</div><div class="v">0.6%</div><div class="d">the whitespace nobody owns yet</div></div>
+  </div>
+</section>
+
+<section id="coverage">
+  <div class="sec-label reveal">01 · Coverage universe</div>
+  <h2 class="reveal">Fintech-native apps own the top of the table.</h2>
+  <p class="lede reveal">A Digital Experience Score (0–100) per firm: 50% live Play Store rating,
+    30% review sentiment, 20% pain-free rate. Simple, stated, auditable.</p>
+  <div class="legend reveal"><span><i style="background:var(--fintech)"></i>Fintech-native</span>
+    <span><i style="background:var(--incumbent)"></i>Incumbent</span></div>
+  <div class="ladder reveal" id="ladder"></div>
+</section>
+
+<section id="anatomy">
+  <div class="sec-label reveal">02 · Complaint anatomy</div>
+  <h2 class="reveal">The pain is specific, and <em>fixable</em>.</h2>
+  <p class="lede reveal">Share of each firm's 1–2★ reviews citing each theme. Hover any cell.
+    The worst cell per theme is ringed in gold.</p>
+  <div class="matrix-wrap reveal"><div class="matrix" id="matrix"></div></div>
+  <p class="mx-note reveal" id="mx-note"></p>
+</section>
+
+<section id="growth">
+  <div class="sec-label reveal">03 · The growth link</div>
+  <h2 class="reveal">No bottom-half broker grew this year.</h2>
+  <div class="thesis reveal">The two best-scoring apps, Dhan and Groww, were the only
+    brokers that grew clients in a shrinking market.</div>
+  <svg id="scatter" viewBox="0 0 920 520" role="img" aria-label="Scatter plot of experience score versus client growth" class="reveal"></svg>
+  <p class="modelnote reveal" id="modelnote"></p>
+</section>
+
+<section id="desk">
+  <div class="sec-label reveal">04 · Scenario desk</div>
+  <h2 class="reveal">Pick a broker. Close its gap. <em>Read off what the upgrade is worth.</em></h2>
+  <div class="desk">
+    <div class="controls reveal">
+      <label for="c-firm">Broker</label>
+      <select id="c-firm"></select>
+      <label for="c-target">Target score <output id="o-target"></output></label>
+      <input type="range" id="c-target" min="60" max="95" step="0.5">
+      <label for="c-slope">Elasticity, pp per point <output id="o-slope"></output></label>
+      <input type="range" id="c-slope" min="0" max="1" step="0.01">
+      <label for="c-rev">Revenue per client, ₹/yr <output id="o-rev"></output></label>
+      <input type="range" id="c-rev" min="1000" max="8000" step="250" value="3000">
+    </div>
+    <div class="result reveal">
+      <div class="big"><span id="r-clients">+0 clients</span><br><span id="r-rev" style="color:var(--ink)">₹0 cr</span> a year</div>
+      <div class="trail" id="r-trail"></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-in">
+    <div class="col">SOURCES · Google Play via google-play-scraper (IN storefront) ·
+      NSE active clients via Chittorgarh monthly top-20 rankings &amp; StartupTalky Jun-2026 analysis ·
+      Cross-sectional fit, n=13: directional evidence, not causation.</div>
+    <div class="col">A project by <b style="color:var(--ink)">Aditya Dalal</b> · UMass Amherst ·
+      <a href="https://github.com/Ady1-pixel/india-wealthtech-gap">Code &amp; analysis on GitHub ↗</a></div>
+  </div>
+</footer>
+
+<div id="tip" role="tooltip"></div>
+<script src="data.js"></script>
+<script>
+const $=(q,el=document)=>el.querySelector(q);
+const CAT={fintech:{c:'var(--fintech)',l:'Fintech-native'},incumbent:{c:'var(--incumbent)',l:'Incumbent'}};
+const inr=n=>{n=Math.round(n).toString();if(n.length<=3)return n;let h=n.slice(0,-3),t=n.slice(-3),p=[];
+  while(h.length>2){p.unshift(h.slice(-2));h=h.slice(0,-2)}if(h)p.unshift(h);return p.concat(t).join(',')};
+const rating=s=>s>=84?['Leader','leader']:s>=75?['In line','']:['Laggard','laggard'];
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* loader */
+addEventListener('load',()=>setTimeout(()=>$('#loader').classList.add('gone'),reduced?0:950));
+
+/* progress + topbar */
+addEventListener('scroll',()=>{
+  const h=document.documentElement, p=h.scrollTop/(h.scrollHeight-h.clientHeight);
+  $('#progress').style.width=(p*100)+'%';
+  $('#topbar').classList.toggle('show',h.scrollTop>innerHeight*.85);
+},{passive:true});
+
+/* reveal on scroll */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.18});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* count-up */
+const cio=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting)return;cio.unobserve(e.target);
+  const el=e.target,end=+el.dataset.count;
+  if(reduced){el.textContent=end.toLocaleString('en-IN');return}
+  const t0=performance.now(),D=900;
+  (function f(t){const k=Math.min(1,(t-t0)/D),v=Math.round(end*(1-Math.pow(1-k,3)));
+    el.textContent=v.toLocaleString('en-IN');if(k<1)requestAnimationFrame(f)})(t0);
+  setTimeout(()=>{el.textContent=end.toLocaleString('en-IN')},D+150);
+}),{threshold:.6});
+document.querySelectorAll('[data-count]').forEach(el=>cio.observe(el));
+
+/* ticker */
+{const seg=DATA.firms.map(f=>`<span class="tk"><i class="dot" style="background:${CAT[f.category].c}"></i>
+  <span class="n">${f.firm}</span><span class="s">${Math.round(f.score)}</span>
+  <span class="r">${rating(f.score)[0].toUpperCase()}</span></span>`).join('');
+ $('#ticker').innerHTML=seg+seg;}
+
+/* ladder */
+{const lo=60,hi=92;
+ let html=`<div class="lhead"><div>#</div><div>Firm</div><div style="text-align:right">Score</div>
+   <div>Scale 60–92</div><div style="text-align:right">NSE clients</div><div style="text-align:center">Rating</div></div>`;
+ DATA.firms.forEach((f,i)=>{const [rl,rc]=rating(f.score),w=100*(f.score-lo)/(hi-lo);
+  html+=`<div class="lrow"><div class="rk">${String(i+1).padStart(2,'0')}</div>
+   <div class="fm">${f.firm}<small>${CAT[f.category].l}</small></div>
+   <div class="sc">${Math.round(f.score)}</div>
+   <div class="track"><div class="fill" style="width:${w}%;background:${CAT[f.category].c};transition-delay:${.08+i*.04}s"></div></div>
+   <div class="cl">${f.clients?inr(f.clients):'·'}</div>
+   <div class="chip ${rc}">${rl}</div></div>`});
+ $('#ladder').innerHTML=html;}
+
+/* complaint matrix */
+{const themes=Object.keys(DATA.themeLabels);
+ const firms=[...DATA.firms].sort((a,b)=>b.painRate-a.painRate);
+ const maxV=Math.max(...firms.flatMap(f=>themes.map(t=>f.themes[t])));
+ const worst={};themes.forEach(t=>{worst[t]=Math.max(...firms.map(f=>f.themes[t]))});
+ let worstCell={v:0};
+ const m=$('#matrix');m.style.gridTemplateColumns=`11rem repeat(${themes.length},1fr)`;
+ let html=`<div class="mx-corner"></div>`+themes.map(t=>`<div class="mx-col">${DATA.themeLabels[t]}</div>`).join('');
+ firms.forEach(f=>{html+=`<div class="mx-firm">${f.firm}</div>`;
+  themes.forEach(t=>{const v=f.themes[t],a=(v/maxV);
+   if(v>worstCell.v)worstCell={v,firm:f.firm,theme:DATA.themeLabels[t]};
+   html+=`<div class="cell${v===worst[t]&&v>0?' worst':''}" data-firm="${f.firm}" data-theme="${DATA.themeLabels[t]}" data-v="${v.toFixed(1)}">
+     <i style="opacity:${(0.06+0.94*a).toFixed(2)}"></i>
+     <span>${v.toFixed(1)}</span></div>`})});
+ m.innerHTML=html;
+ $('#mx-note').innerHTML=`Worst cell in the matrix: <b>${worstCell.firm} · ${worstCell.theme} · ${worstCell.v.toFixed(1)}%</b> of its reviews are 1–2★ on that theme alone. Rows sorted by overall pain rate.`;
+ const tip=$('#tip');
+ m.addEventListener('mousemove',e=>{const c=e.target.closest('.cell');
+  if(!c){tip.style.opacity=0;return}
+  tip.innerHTML=`<b>${c.dataset.firm}</b><br>${c.dataset.theme}: ${c.dataset.v}% of reviews`;
+  tip.style.opacity=1;tip.style.left=Math.min(e.clientX+14,innerWidth-260)+'px';tip.style.top=(e.clientY+14)+'px'});
+ m.addEventListener('mouseleave',()=>tip.style.opacity=0);}
+
+/* scatter */
+{const svg=$('#scatter'),W=920,H=520,P={l:64,r:30,t:20,b:52};
+ const pts=DATA.firms.filter(f=>f.growthPct!==null);
+ const xs=[66,90],ys=[-9,11];
+ const X=v=>P.l+(v-xs[0])/(xs[1]-xs[0])*(W-P.l-P.r);
+ const Y=v=>H-P.b-(v-ys[0])/(ys[1]-ys[0])*(H-P.t-P.b);
+ let s='';
+ for(let g=ys[0]+1;g<ys[1];g+=2)s+=`<line x1="${P.l}" x2="${W-P.r}" y1="${Y(g)}" y2="${Y(g)}" stroke="#1e232e"/>`;
+ s+=`<line x1="${P.l}" x2="${W-P.r}" y1="${Y(0)}" y2="${Y(0)}" stroke="#2a3040" stroke-width="1.5"/>`;
+ for(let g=68;g<=88;g+=4)s+=`<text x="${X(g)}" y="${H-P.b+22}" fill="#a8adba" font-size="11" text-anchor="middle">${g}</text>`;
+ for(let g=ys[0]+1;g<ys[1];g+=2)s+=`<text x="${P.l-10}" y="${Y(g)+4}" fill="#a8adba" font-size="11" text-anchor="end">${g}%</text>`;
+ s+=`<text x="${(P.l+W-P.r)/2}" y="${H-8}" fill="#a8adba" font-size="11" text-anchor="middle" letter-spacing="2">DIGITAL EXPERIENCE SCORE</text>`;
+ s+=`<text x="14" y="${(P.t+H-P.b)/2}" fill="#a8adba" font-size="11" text-anchor="middle" letter-spacing="2" transform="rotate(-90 14 ${(P.t+H-P.b)/2})">CLIENT GROWTH YOY</text>`;
+ const m=DATA.model;
+ s+=`<line x1="${X(xs[0]+.5)}" y1="${Y(m.intercept+m.slope*(xs[0]+.5))}" x2="${X(xs[1]-.5)}" y2="${Y(m.intercept+m.slope*(xs[1]-.5))}" stroke="#a8adba" stroke-dasharray="6 5" stroke-width="1.5"/>`;
+ const labeled=['Dhan','Groww','ICICIdirect','Motilal Oswal','Upstox','Zerodha'];
+ pts.forEach(f=>{const c=f.category==='fintech'?'#3987e5':'#d95926';
+  s+=`<circle class="pt" cx="${X(f.score)}" cy="${Y(f.growthPct)}" r="7" fill="${c}"
+    data-firm="${f.firm}" data-v="${f.score} · ${f.growthPct>0?'+':''}${f.growthPct}%"/>`;
+  if(labeled.includes(f.firm))s+=`<text x="${X(f.score)}" y="${Y(f.growthPct)-13}" fill="#a8adba" font-size="11" text-anchor="middle">${f.firm}</text>`});
+ svg.innerHTML=s;
+ $('#modelnote').textContent=`Fit across ${m.nFirms} brokers: +${m.slope.toFixed(2)} pp growth per experience point (95% CI ${m.ci[0].toFixed(2)} to ${m.ci[1].toFixed(2)}, R² ${m.r2.toFixed(2)}). Small sample: directional, not causal.`;
+ const tip=$('#tip');
+ svg.addEventListener('mousemove',e=>{const c=e.target.closest('.pt');
+  if(!c){tip.style.opacity=0;return}
+  c.setAttribute('r',9);
+  tip.innerHTML=`<b>${c.dataset.firm}</b><br>${c.dataset.v}`;
+  tip.style.opacity=1;tip.style.left=Math.min(e.clientX+14,innerWidth-260)+'px';tip.style.top=(e.clientY+14)+'px'});
+ svg.addEventListener('mouseout',e=>{const c=e.target.closest('.pt');if(c)c.setAttribute('r',7)});
+ svg.addEventListener('mouseleave',()=>tip.style.opacity=0);}
+
+/* scenario desk */
+{const brokers=DATA.firms.filter(f=>f.clients);
+ const sel=$('#c-firm');
+ brokers.forEach(f=>{const o=document.createElement('option');o.value=f.firm;o.textContent=f.firm;sel.append(o)});
+ sel.value='ICICIdirect';
+ const m=DATA.model;
+ $('#c-target').value=m.targetP75;$('#c-slope').value=m.slope.toFixed(2);
+ function upd(){
+  const f=brokers.find(b=>b.firm===sel.value);
+  const target=+$('#c-target').value,slope=+$('#c-slope').value,rev=+$('#c-rev').value;
+  const gap=Math.max(0,target-f.score),up=slope*gap;
+  const extra=f.clients*up/100,cr=extra*rev/1e7;
+  $('#o-target').textContent=target.toFixed(1);$('#o-slope').textContent=slope.toFixed(2);
+  $('#o-rev').textContent='₹'+inr(rev);
+  $('#r-clients').textContent=`+${inr(extra)} clients`;
+  $('#r-rev').textContent=`₹${cr.toFixed(1)} cr`;
+  $('#r-trail').innerHTML=`${f.firm.toUpperCase()} · score ${Math.round(f.score)} → ${target.toFixed(0)} (${gap.toFixed(1)} pts) ·
+   uplift ${up.toFixed(2)} pp on ${inr(f.clients)} active clients · ₹${inr(rev)}/client/yr<br><br>
+   Illustrative scenario, not a forecast: assumes the association is causal and linear, which n=${m.nFirms} cannot establish.`;
+ }
+ ['c-firm','c-target','c-slope','c-rev'].forEach(id=>$('#'+id).addEventListener('input',upd));
+ upd();}
+</script>
+</body>
+</html>
