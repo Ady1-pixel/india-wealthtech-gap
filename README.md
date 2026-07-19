@@ -49,14 +49,11 @@ Google Play (live)          NSE active clients (public)
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
-python -m src.scrape          # pulls live metadata + ~2,500 reviews per app
-python -m src.nlp             # sentiment + theme tagging
-python -m src.scores          # per-firm experience scores
-python -m src.model           # growth fit + scenarios
-python -m src.charts          # README charts
-
+python run_pipeline.py        # full pipeline: scrape -> nlp -> scores -> model -> charts
 streamlit run app/streamlit_app.py
 ```
+
+Each stage also runs standalone (`python -m src.scrape`, `src.nlp`, `src.scores`, `src.model`, `src.charts`), and `python run_pipeline.py --count 200` does a quick test pull.
 
 Raw review text is not redistributed in this repo (it is user-generated content scraped from Google Play); the scraper regenerates it in a few minutes. All derived aggregates are committed so the analysis and dashboard work out of the box.
 

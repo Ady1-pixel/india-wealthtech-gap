@@ -64,7 +64,7 @@ def scrape_reviews(count: int) -> pd.DataFrame:
             got.extend(batch)
             if token is None:
                 break
-        df = pd.DataFrame(got)
+        df = pd.DataFrame(got[:count])
         if df.empty:
             print(f"[reviews] {entry['firm']}: NO REVIEWS PULLED", file=sys.stderr)
             continue

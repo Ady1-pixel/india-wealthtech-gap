@@ -134,6 +134,44 @@ h1.note-title, .stApp h1.note-title {
 
 .src-foot { font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem; color: #a8adba;
   border-top: 1px solid #2a3040; padding-top: 0.7rem; margin-top: 2.2rem; }
+
+/* ---- motion: content arrives, quietly ---- */
+@keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.note-eyebrow { animation: rise 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
+h1.note-title, .stApp h1.note-title { animation: rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both; }
+.note-sub { animation: rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both; }
+.dateline { animation: rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.18s both; }
+.tile { animation: rise 0.45s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.tile-row .tile:nth-child(2) { animation-delay: 0.07s; }
+.tile-row .tile:nth-child(3) { animation-delay: 0.14s; }
+.lrow { animation: rise 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.bar-fill { transform-origin: left; animation: grow 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.thesis, .ladder, .result-card { animation: rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* ---- interaction states ---- */
+.tile, .lrow, .chip { transition: background 0.18s ease-out, border-color 0.18s ease-out; }
+.tile:hover { border-color: #3a4155; }
+.tile.accent:hover { border-color: #f7b733; }
+.lrow:hover { background: #1e232e; }
+.stTabs [data-baseweb="tab"] { transition: color 0.18s ease-out; }
+.stTabs [data-baseweb="tab"]:hover { color: #f4f2ec; }
+.stTabs [data-baseweb="tab"]:focus-visible { outline: 2px solid #eda100; outline-offset: 3px; }
+
+/* ---- responsive ---- */
+@media (max-width: 900px) {
+  h1.note-title, .stApp h1.note-title { font-size: 2.2rem; }
+  .tile-row { grid-template-columns: 1fr; }
+  .ladder-head, .lrow { grid-template-columns: 2rem 1fr 2.6rem 5rem; gap: 0.5rem; }
+  .ladder-head div:nth-child(4), .ladder-head div:nth-child(5),
+  .lrow .bar-track, .lrow .clients { display: none; }
+  .dateline { gap: 0.9rem; }
+}
+
+/* ---- accessibility: respect reduced motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
 </style>
 """,
     unsafe_allow_html=True,
@@ -250,12 +288,13 @@ with tab1:
         width = 100 * (r["experience_score"] - lo) / (hi - lo)
         clients = clients_map.get(r["firm"])
         clients_txt = fmt_inr(clients) if clients is not None and pd.notna(clients) else "·"
+        delay = 0.05 + i * 0.035
         rows.append(
-            f"""<div class="lrow">
+            f"""<div class="lrow" style="animation-delay:{delay:.3f}s">
   <div class="rank">{i + 1:02d}</div>
   <div class="firm">{r['firm']}<small>{CAT_LABELS[r['category']]}</small></div>
   <div class="score">{r['experience_score']:.0f}</div>
-  <div class="bar-track"><div class="bar-fill" style="width:{width:.0f}%;background:{CAT_COLORS[r['category']]}"></div></div>
+  <div class="bar-track"><div class="bar-fill" style="width:{width:.0f}%;background:{CAT_COLORS[r['category']]};animation-delay:{delay + 0.1:.3f}s"></div></div>
   <div class="clients">{clients_txt}</div>
   <div class="chip {cls}">{label}</div>
 </div>"""

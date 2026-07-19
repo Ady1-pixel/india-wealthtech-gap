@@ -40,17 +40,11 @@ plt.rcParams.update(
 )
 
 
-def dress(fig, ax, source):
-    fig.text(0.012, 0.982, "INDIA WEALTHTECH \u00b7 SECTOR NOTE \u00b7 JULY 2026",
-             fontsize=7.5, color=MARIGOLD, fontfamily=MONO, va="top")
-    fig.text(0.012, 0.012, source, fontsize=7.5, color=INK_2, fontfamily=MONO, va="bottom")
-
-
 def color_for(cat: str) -> str:
     return FINTECH if cat == "fintech" else INCUMBENT
 
 
-def legend(ax):
+def legend(ax) -> None:
     handles = [
         plt.Rectangle((0, 0), 1, 1, color=FINTECH, label="Fintech-native"),
         plt.Rectangle((0, 0), 1, 1, color=INCUMBENT, label="Incumbent"),
@@ -58,26 +52,35 @@ def legend(ax):
     ax.legend(handles=handles, frameon=False, loc="lower right", fontsize=9)
 
 
-def chart_experience_ranking(scores: pd.DataFrame) -> None:
-    df = scores.sort_values("experience_score")
+def dress(fig, source: str) -> None:
+    """Sector-note framing: eyebrow on top, source line at the bottom."""
+    fig.text(0.012, 0.982, "INDIA WEALTHTECH · SECTOR NOTE · JULY 2026",
+             fontsize=7.5, color=MARIGOLD, fontfamily=MONO, va="top")
+    fig.text(0.012, 0.012, source, fontsize=7.5, color=INK_2, fontfamily=MONO, va="bottom")
+
+
+def hbar(df: pd.DataFrame, value_col: str, title: str, xlabel: str, source: str,
+         fname: str, value_fmt=lambda v: f"{v:.0f}", label_pad: float = 0.7,
+         xlim: tuple | None = None, top_first: bool = True) -> None:
+    """One ranked horizontal bar chart, colored by firm category."""
+    df = df.sort_values(value_col, ascending=not top_first)
+    if top_first:
+        df = df.iloc[::-1]  # barh draws bottom-up; flip so rank 1 lands on top
     fig, ax = plt.subplots(figsize=(9, 6.5))
-    bars = ax.barh(
-        df["firm"], df["experience_score"],
-        color=[color_for(c) for c in df["category"]], height=0.62,
-    )
-    for bar, v in zip(bars, df["experience_score"]):
-        ax.text(v + 0.7, bar.get_y() + bar.get_height() / 2, f"{v:.0f}",
+    bars = ax.barh(df["firm"], df[value_col],
+                   color=[color_for(c) for c in df["category"]], height=0.62)
+    for bar, v in zip(bars, df[value_col]):
+        ax.text(v + label_pad, bar.get_y() + bar.get_height() / 2, value_fmt(v),
                 va="center", fontsize=9, color=INK)
-    ax.set_xlim(0, 100)
-    ax.set_xlabel("Digital Experience Score (0–100)")
-    ax.set_title(
-        "Fintech-native apps hold the top of the experience table",
-        loc="left", fontsize=14, fontweight="bold", color=INK, pad=16, fontfamily=SERIF,
-    )
+    if xlim:
+        ax.set_xlim(*xlim)
+    ax.set_xlabel(xlabel)
+    ax.set_title(title, loc="left", fontsize=14, fontweight="bold", color=INK,
+                 pad=16, fontfamily=SERIF)
     legend(ax)
     fig.tight_layout(rect=(0, 0.03, 1, 0.97))
-    dress(fig, ax, "SOURCE: 44,200 GOOGLE PLAY REVIEWS (IN STOREFRONT), SCRAPED JULY 2026")
-    fig.savefig(OUTPUTS / "experience_ranking.png", dpi=180)
+    dress(fig, source)
+    fig.savefig(OUTPUTS / fname, dpi=180)
     plt.close(fig)
 
 
@@ -95,59 +98,13 @@ def chart_score_vs_growth(panel: pd.DataFrame, model: dict) -> None:
     ax.axhline(0, color=INK_2, lw=0.8, alpha=0.5)
     ax.set_xlabel("Digital Experience Score (0–100)")
     ax.set_ylabel("Active-client growth, mid-2025 → June 2026 (%)")
-    ax.set_title(
-        "The only brokers that grew are near the top of the experience table",
-        loc="left", fontsize=14, fontweight="bold", color=INK, pad=16, fontfamily=SERIF,
-    )
+    ax.set_title("The only brokers that grew are near the top of the experience table",
+                 loc="left", fontsize=14, fontweight="bold", color=INK, pad=16,
+                 fontfamily=SERIF)
     legend(ax)
     fig.tight_layout(rect=(0, 0.03, 1, 0.97))
-    dress(fig, ax, "SOURCE: GOOGLE PLAY REVIEWS + NSE ACTIVE CLIENTS VIA CHITTORGARH / STARTUPTALKY")
+    dress(fig, "SOURCE: GOOGLE PLAY REVIEWS + NSE ACTIVE CLIENTS VIA CHITTORGARH / STARTUPTALKY")
     fig.savefig(OUTPUTS / "score_vs_growth.png", dpi=180)
-    plt.close(fig)
-
-
-def chart_pain_rates(scores: pd.DataFrame) -> None:
-    df = scores.sort_values("pain_rate", ascending=False)
-    fig, ax = plt.subplots(figsize=(9, 6.5))
-    bars = ax.barh(
-        df["firm"], 100 * df["pain_rate"],
-        color=[color_for(c) for c in df["category"]], height=0.62,
-    )
-    for bar, v in zip(bars, 100 * df["pain_rate"]):
-        ax.text(v + 0.25, bar.get_y() + bar.get_height() / 2, f"{v:.1f}%",
-                va="center", fontsize=9, color=INK)
-    ax.invert_yaxis()
-    ax.set_xlabel("Share of reviews that are 1–2 stars and cite UI/UX, crashes, KYC, or support")
-    ax.set_title(
-        "Where the experience actively hurts: pain rate by app",
-        loc="left", fontsize=14, fontweight="bold", color=INK, pad=16, fontfamily=SERIF,
-    )
-    legend(ax)
-    fig.tight_layout(rect=(0, 0.03, 1, 0.97))
-    dress(fig, ax, "SOURCE: 44,200 GOOGLE PLAY REVIEWS, THEME-TAGGED 1-2 STAR SHARE")
-    fig.savefig(OUTPUTS / "pain_rates.png", dpi=180)
-    plt.close(fig)
-
-
-def chart_ai_whitespace(scores: pd.DataFrame) -> None:
-    df = scores.sort_values("ai_mention_rate", ascending=True)
-    fig, ax = plt.subplots(figsize=(9, 6.5))
-    bars = ax.barh(
-        df["firm"], 100 * df["ai_mention_rate"],
-        color=[color_for(c) for c in df["category"]], height=0.62,
-    )
-    for bar, v in zip(bars, 100 * df["ai_mention_rate"]):
-        ax.text(v + 0.02, bar.get_y() + bar.get_height() / 2, f"{v:.1f}%",
-                va="center", fontsize=9, color=INK)
-    ax.set_xlabel("Share of reviews mentioning AI / advisory / smart features")
-    ax.set_title(
-        "AI is barely part of the user conversation yet: the whitespace",
-        loc="left", fontsize=14, fontweight="bold", color=INK, pad=16, fontfamily=SERIF,
-    )
-    legend(ax)
-    fig.tight_layout(rect=(0, 0.03, 1, 0.97))
-    dress(fig, ax, "SOURCE: 44,200 GOOGLE PLAY REVIEWS, AI/ADVISORY KEYWORD MENTIONS")
-    fig.savefig(OUTPUTS / "ai_whitespace.png", dpi=180)
     plt.close(fig)
 
 
@@ -158,10 +115,29 @@ def main() -> None:
     with open(DATA_PROCESSED / "model_results.json") as f:
         model = json.load(f)
 
-    chart_experience_ranking(scores)
+    hbar(scores, "experience_score",
+         "Fintech-native apps hold the top of the experience table",
+         "Digital Experience Score (0–100)",
+         "SOURCE: 44,200 GOOGLE PLAY REVIEWS (IN STOREFRONT), SCRAPED JULY 2026",
+         "experience_ranking.png", xlim=(0, 100))
+
     chart_score_vs_growth(panel, model)
-    chart_pain_rates(scores)
-    chart_ai_whitespace(scores)
+
+    pain = scores.assign(pain_pct=100 * scores["pain_rate"])
+    hbar(pain, "pain_pct",
+         "Where the experience actively hurts: pain rate by app",
+         "Share of reviews that are 1–2 stars and cite UI/UX, crashes, KYC, or support",
+         "SOURCE: 44,200 GOOGLE PLAY REVIEWS, THEME-TAGGED 1-2 STAR SHARE",
+         "pain_rates.png", value_fmt=lambda v: f"{v:.1f}%", label_pad=0.25)
+
+    ai = scores.assign(ai_pct=100 * scores["ai_mention_rate"])
+    hbar(ai, "ai_pct",
+         "AI is barely part of the user conversation yet: the whitespace",
+         "Share of reviews mentioning AI / advisory / smart features",
+         "SOURCE: 44,200 GOOGLE PLAY REVIEWS, AI/ADVISORY KEYWORD MENTIONS",
+         "ai_whitespace.png", value_fmt=lambda v: f"{v:.1f}%", label_pad=0.02,
+         top_first=False)
+
     print(f"Charts saved to {OUTPUTS}")
 
 
