@@ -1,0 +1,8 @@
+google-play-scraper>=1.2
+pandas>=2.0
+requests>=2.31
+vaderSentiment>=3.3
+scipy>=1.11
+matplotlib>=3.8
+streamlit>=1.35
+plotly>=5.20

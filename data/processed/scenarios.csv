@@ -1,0 +1,14 @@
+firm,category,experience_score,score_gap_to_target,actual_growth_pct,modeled_uplift_pp,projected_extra_clients_1yr,projected_extra_revenue_inr_cr
+Motilal Oswal,incumbent,67.5,15.5,-0.58,4.35,39076,11.7
+Upstox,fintech,79.8,3.2,-7.32,0.9,16941,5.1
+Mirae Asset Sharekhan,incumbent,75.3,7.7,-1.5,2.16,11351,3.4
+ICICIdirect,incumbent,81.3,1.7,3.72,0.48,10114,3.0
+Kotak Neo,incumbent,81.0,2.0,0.82,0.56,7740,2.3
+HDFC Securities,incumbent,81.3,1.7,-5.98,0.48,6410,1.9
+Angel One,fintech,82.7,0.3,-1.66,0.08,5582,1.7
+Paytm Money,fintech,80.7,2.3,-3.92,0.65,5332,1.6
+5paisa,fintech,81.2,1.8,-6.55,0.5,1619,0.5
+Groww,fintech,87.6,0.0,4.59,0.0,0,0.0
+Dhan,fintech,85.0,0.0,9.58,0.0,0,0.0
+SBI Securities,incumbent,83.2,0.0,-2.2,0.0,0,0.0
+Zerodha,fintech,83.0,0.0,-0.89,0.0,0,0.0

@@ -1,0 +1,18 @@
+firm,app_id,segment,category,app_title,play_rating,ratings_count,reviews_count,installs,histogram_1_to_5,last_updated
+Groww,com.nextbillion.groww,broker,fintech,"Groww Stocks, Mutual Fund, IPO",4.7664137,2346135,419363,"100,000,000+","[51933, 18615, 42486, 199469, 2033628]",
+Zerodha,com.zerodha.kite3,broker,fintech,Zerodha Kite - Trade & Invest,4.4264097,390192,124034,"10,000,000+","[31888, 6874, 13830, 47964, 289630]",
+Angel One,com.msf.angelmobile,broker,fintech,"Angel One: Stocks, Mutual Fund",4.392057,1860754,331009,"100,000,000+","[128533, 46233, 109925, 258541, 1317517]",
+ICICIdirect,com.icicidirect.idirectsuper,broker,incumbent,ICICI Direct-Stocks F&O MF IPO,4.553918,185641,17357,"5,000,000+","[9288, 3184, 6644, 22804, 143714]",
+Upstox,in.upstox.app,broker,fintech,Upstox Stocks IPO Mutual Funds,4.348478,489703,86190,"10,000,000+","[45305, 9996, 19306, 69222, 345869]",
+Kotak Neo,com.kotak.neo,broker,incumbent,Kotak Neo: Stock Trading App,4.4357924,205960,30476,"10,000,000+","[15113, 3918, 9676, 24639, 152610]",
+HDFC Securities,com.cloudtradetech.sky,broker,incumbent,HDFC SKY: Demat Stocks IPO MF,4.437724,41935,5190,"10,000,000+","[3096, 992, 1824, 4560, 31458]",
+SBI Securities,com.msf.sbicap.securities,broker,incumbent,SBI Securities: Stocks & SIP,4.3521795,55718,20607,"5,000,000+","[5558, 1412, 1839, 5944, 40962]",
+Dhan,com.dhan.live,broker,fintech,Dhan: Stock Market Trading App,4.38329,58424,35923,"10,000,000+","[5859, 1690, 2230, 3057, 45584]",
+Motilal Oswal,mosl.powerapp.com,broker,incumbent,MO Trader: Stock Trading App,3.3976233,11110,6208,"1,000,000+","[3685, 466, 486, 679, 5788]",
+Paytm Money,com.paytmmoney,broker,fintech,"Paytm Money Stocks, MF, IPO",4.438181,234524,70981,"10,000,000+","[16744, 4645, 10463, 29915, 172754]",
+Mirae Asset Sharekhan,com.sharekhan.androidsharemobile,broker,incumbent,Mirae Asset Sharekhan: Invest,4.161568,127796,32704,"5,000,000+","[16202, 3615, 7060, 17364, 83550]",
+5paisa,com.fivepaisa.trade,broker,fintech,"5paisa: Demat, Stocks & IPO",4.251931,655875,111581,"10,000,000+","[64737, 20113, 42603, 86140, 442278]",
+Coin by Zerodha,com.zerodha.coin,platform,fintech,Coin by Zerodha - Mutual funds,3.832813,29240,7972,"5,000,000+","[5435, 1327, 2007, 4380, 16084]","May 12, 2026"
+ET Money,com.smartspends,platform,fintech,"ET Money Mutual Fund, SIF, SIP",4.4133925,231583,50981,"10,000,000+","[15673, 4208, 11653, 37212, 162830]","Jul 14, 2026"
+Kuvera,com.gooogle.android.kuvera.app,platform,fintech,Kuvera: Mutual Funds & SIP App,3.4159343,18191,5870,"1,000,000+","[6030, 724, 649, 1214, 9568]","Jul 16, 2026"
+INDmoney,in.indwealth,platform,fintech,"INDmoney: Stocks, Mutual Funds",4.562088,453946,61423,"10,000,000+","[18406, 4935, 15111, 80124, 335364]",
