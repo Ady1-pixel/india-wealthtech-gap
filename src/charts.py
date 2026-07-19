@@ -13,16 +13,20 @@ from src.config import DATA_PROCESSED, OUTPUTS
 
 FINTECH = "#2a78d6"
 INCUMBENT = "#eb6834"
-INK = "#0b0b0b"
-INK_2 = "#52514e"
-SURFACE = "#fcfcfb"
+MARIGOLD = "#b57a00"
+INK = "#1c1a16"
+INK_2 = "#6b675e"
+SURFACE = "#faf8f3"
+SERIF = "Georgia"
+MONO = "Menlo"
 
 plt.rcParams.update(
     {
         "figure.facecolor": SURFACE,
         "axes.facecolor": SURFACE,
         "savefig.facecolor": SURFACE,
-        "font.family": "sans-serif",
+        "font.family": MONO,
+        "font.size": 9.5,
         "text.color": INK,
         "axes.edgecolor": INK_2,
         "axes.labelcolor": INK_2,
@@ -34,6 +38,12 @@ plt.rcParams.update(
         "axes.grid": False,
     }
 )
+
+
+def dress(fig, ax, source):
+    fig.text(0.012, 0.982, "INDIA WEALTHTECH \u00b7 SECTOR NOTE \u00b7 JULY 2026",
+             fontsize=7.5, color=MARIGOLD, fontfamily=MONO, va="top")
+    fig.text(0.012, 0.012, source, fontsize=7.5, color=INK_2, fontfamily=MONO, va="bottom")
 
 
 def color_for(cat: str) -> str:
@@ -62,10 +72,11 @@ def chart_experience_ranking(scores: pd.DataFrame) -> None:
     ax.set_xlabel("Digital Experience Score (0–100)")
     ax.set_title(
         "Fintech-native apps hold the top of the experience table",
-        loc="left", fontsize=13, fontweight="bold", color=INK, pad=14,
+        loc="left", fontsize=14, fontweight="bold", color=INK, pad=16, fontfamily=SERIF,
     )
     legend(ax)
-    fig.tight_layout()
+    fig.tight_layout(rect=(0, 0.03, 1, 0.97))
+    dress(fig, ax, "SOURCE: 44,200 GOOGLE PLAY REVIEWS (IN STOREFRONT), SCRAPED JULY 2026")
     fig.savefig(OUTPUTS / "experience_ranking.png", dpi=180)
     plt.close(fig)
 
@@ -86,10 +97,11 @@ def chart_score_vs_growth(panel: pd.DataFrame, model: dict) -> None:
     ax.set_ylabel("Active-client growth, mid-2025 → June 2026 (%)")
     ax.set_title(
         "The only brokers that grew are near the top of the experience table",
-        loc="left", fontsize=13, fontweight="bold", color=INK, pad=14,
+        loc="left", fontsize=14, fontweight="bold", color=INK, pad=16, fontfamily=SERIF,
     )
     legend(ax)
-    fig.tight_layout()
+    fig.tight_layout(rect=(0, 0.03, 1, 0.97))
+    dress(fig, ax, "SOURCE: GOOGLE PLAY REVIEWS + NSE ACTIVE CLIENTS VIA CHITTORGARH / STARTUPTALKY")
     fig.savefig(OUTPUTS / "score_vs_growth.png", dpi=180)
     plt.close(fig)
 
@@ -108,10 +120,11 @@ def chart_pain_rates(scores: pd.DataFrame) -> None:
     ax.set_xlabel("Share of reviews that are 1–2 stars and cite UI/UX, crashes, KYC, or support")
     ax.set_title(
         "Where the experience actively hurts: pain rate by app",
-        loc="left", fontsize=13, fontweight="bold", color=INK, pad=14,
+        loc="left", fontsize=14, fontweight="bold", color=INK, pad=16, fontfamily=SERIF,
     )
     legend(ax)
-    fig.tight_layout()
+    fig.tight_layout(rect=(0, 0.03, 1, 0.97))
+    dress(fig, ax, "SOURCE: 44,200 GOOGLE PLAY REVIEWS, THEME-TAGGED 1-2 STAR SHARE")
     fig.savefig(OUTPUTS / "pain_rates.png", dpi=180)
     plt.close(fig)
 
@@ -129,10 +142,11 @@ def chart_ai_whitespace(scores: pd.DataFrame) -> None:
     ax.set_xlabel("Share of reviews mentioning AI / advisory / smart features")
     ax.set_title(
         "AI is barely part of the user conversation yet: the whitespace",
-        loc="left", fontsize=13, fontweight="bold", color=INK, pad=14,
+        loc="left", fontsize=14, fontweight="bold", color=INK, pad=16, fontfamily=SERIF,
     )
     legend(ax)
-    fig.tight_layout()
+    fig.tight_layout(rect=(0, 0.03, 1, 0.97))
+    dress(fig, ax, "SOURCE: 44,200 GOOGLE PLAY REVIEWS, AI/ADVISORY KEYWORD MENTIONS")
     fig.savefig(OUTPUTS / "ai_whitespace.png", dpi=180)
     plt.close(fig)
 
